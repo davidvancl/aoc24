@@ -1,4 +1,5 @@
 import re
+import math
 
 
 class ALU:
@@ -26,7 +27,6 @@ class ALU:
                         self.__inp(instruction[1])
 
     def __inp(self, variable_a):
-        self.__validate_variables(variable_a)
         if self.__manual_input:
             self.__local_storage[variable_a] = int(input('Enter a number: '))
         else:
@@ -35,24 +35,17 @@ class ALU:
 
     def __do(self, variable_a, variable_b, action):
         if re.match(r"[-+]?\d+(\.0*)?$", variable_b) is not None:
-            self.__validate_variables(variable_a)
             variable_b = int(variable_b)
         else:
-            self.__validate_variables(variable_a, variable_b)
-            variable_b = self.__local_storage[variable_b]
-        self.__local_storage[variable_a] = {
+            variable_b = int(self.__local_storage[variable_b])
+
+        self.__local_storage[variable_a] = int({
             'add': self.__local_storage[variable_a] + variable_b,
             'mul': self.__local_storage[variable_a] * variable_b,
-            'div': 0 if variable_b == 0 else int(self.__local_storage[variable_a] / variable_b),
+            'div': 0 if variable_b == 0 else math.floor(self.__local_storage[variable_a] / variable_b),
             'mod': 0 if variable_b == 0 else self.__local_storage[variable_a] % variable_b,
             'eql': int(self.__local_storage[variable_a] == variable_b),
-        }.get(action, 0)
-
-    def __validate_variables(self, variable_a, variable_b=False):
-        if variable_a not in self.__local_storage:
-            raise Exception("There is no variable {0}".format(variable_a))
-        if variable_b and variable_a not in self.__local_storage:
-            raise Exception("There is no variable {0}".format(variable_b))
+        }.get(action))
 
     def getW(self):
         return self.__local_storage['w']

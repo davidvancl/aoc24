@@ -18,19 +18,16 @@ def cv3(alu):
 
 def MONAD(alu):
     alu.disable_manual_input()
-    step_print = 100000
-    for number in range(11111111111111, 99999999999999):
+    #"29989297949519"
+    for number in ["29989297949519"]:
         number_str = str(number)
         if number_str.find("0") == -1:
             alu.set_number(number_str)
             alu.load_instruction('MONAD')
-            step_print -= 1
-            if step_print == 0:
-                print(number_str)
-                step_print = 100000
             if alu.getZ() == 0:
                 print("number: {0}".format(number_str))
                 print("z:{0}".format(alu.getZ()))
+    print("{0} {1} {2} {3}".format(alu.getW(), alu.getX(), alu.getY(), alu.getZ()))
 
 
 if __name__ == '__main__':
